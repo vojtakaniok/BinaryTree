@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
+using System.Diagnostics;
 
 namespace BinaryTree
 {
@@ -112,7 +114,31 @@ namespace BinaryTree
             return FindNode(uniqNumber).data;
         }
 
+        private void SendToFile(Node<T> node, string adress)
+        {
+            StringBuilder text = new StringBuilder();
+            text.Append("-");
+            text.Append(adress);
+            text.Append("-");
+            text.Append(";" + node.data.ToString() + ";");
 
+            Debug.WriteLine(text.ToString());
+        }
+
+        public void SearchTreeForAdresses(Node<T> root, string filePath, string adress = "")
+        {
+            if (root == null)
+            {   
+                return;
+            }    
+            
+            else
+            {
+                SendToFile(root, adress);
+                SearchTreeForAdresses(root.LeftChild, filePath, adress + "l");
+                SearchTreeForAdresses(root.RightChild, filePath, adress + "r");
+            }
+        }
 
     }
 }
