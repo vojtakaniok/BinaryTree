@@ -8,35 +8,39 @@ using System.Diagnostics;
 
 namespace BinaryTree
 {
-    class Tree<T>
+    class Tree
     {
-        public Node<T> FirstNode { set; get; }
+        public Node Root { set; get; }
         private int AmountOfNodes;
-        public Tree(T data)
+        public Tree(string data)
         {
             AmountOfNodes = 0;
-            FirstNode = new Node<T>(AmountOfNodes, null, data);
+            Root = new Node(AmountOfNodes, null, data);
             AmountOfNodes++;
         }
 
         public Tree()
         {
             AmountOfNodes = 0;
-            FirstNode = new Node<T>(AmountOfNodes, null);
+            Root = new Node(AmountOfNodes, null);
             AmountOfNodes++;
         }
 
-        public int AddNode(T data)
+        public int AddNode(string data)
         {
-            if (FirstNode.LeftChild == null)
+            if (data.ToString().Contains("*") ^ data.ToString().Contains(";"))
+                throw new Exception("Data cannot contain '*' or ';' character!");
+
+
+            if (Root.LeftChild == null)
             {
-                FirstNode.LeftChild = new Node<T>(AmountOfNodes, FirstNode, data);
+                Root.LeftChild = new Node(AmountOfNodes, Root, data);
                 AmountOfNodes++;
                 return AmountOfNodes - 1;
             }
-            else if (FirstNode.RightChild == null)
+            else if (Root.RightChild == null)
             {
-                FirstNode.RightChild = new Node<T>(AmountOfNodes, FirstNode, data);
+                Root.RightChild = new Node(AmountOfNodes, Root, data);
                 AmountOfNodes++;
                 return AmountOfNodes - 1;
             }
@@ -44,17 +48,20 @@ namespace BinaryTree
                 throw new Exception("Node can't have more than two children!");
         }
 
-        public int AddNode(Node<T> node, T data)
+        public int AddNode(Node node, string data, bool startWithRight = false)
         {
-            if (node.LeftChild == null)
+            if (data.ToString().Contains("*") ^ data.ToString().Contains(";"))
+                throw new Exception("Data cannot contain '*' or ';' character!");
+
+            if (node.LeftChild == null & startWithRight == false)
             {
-                node.LeftChild = new Node<T>(AmountOfNodes, node, data);
+                node.LeftChild = new Node(AmountOfNodes, node, data);
                 AmountOfNodes++;
                 return AmountOfNodes - 1;
             }
             else if (node.RightChild == null)
             {
-                node.RightChild = new Node<T>(AmountOfNodes, node, data);
+                node.RightChild = new Node(AmountOfNodes, node, data);
                 AmountOfNodes++;
                 return AmountOfNodes - 1;
             }
@@ -62,10 +69,10 @@ namespace BinaryTree
                 throw new Exception("Node can't have more than two children!");
         }
 
-        public Node<T> FindNode(int uniqNumber)
+        public Node FindNode(int uniqNumber)
         {
-            Node<T> node = FirstNode;
-            List<Node<T>> list = new List<Node<T>>();   // list of unexplored nodes.
+            Node node = Root;
+            List<Node> list = new List<Node>();   // list of unexplored nodes.
             bool SmthToExplore = false;
 
             do
@@ -96,8 +103,8 @@ namespace BinaryTree
 
         public int DeleteNode(int uniqNumber)
         {
-            Node<T> node1 = FindNode(uniqNumber);
-            Node<T> node2 = node1;
+            Node node1 = FindNode(uniqNumber);
+            Node node2 = node1;
             node1 = node1.Parent;
             if (node1.LeftChild == node2)
             {
@@ -109,23 +116,12 @@ namespace BinaryTree
             return uniqNumber;
         }
 
-        public T ShowData(int uniqNumber)
+        public string ShowData(int uniqNumber)
         {
             return FindNode(uniqNumber).data;
         }
 
-        private void SendToFile(Node<T> node, string adress)
-        {
-            StringBuilder text = new StringBuilder();
-            text.Append("-");
-            text.Append(adress);
-            text.Append("-");
-            text.Append(";" + node.data.ToString() + ";");
-
-            Debug.WriteLine(text.ToString());
-        }
-
-        public void SearchTreeForAdresses(Node<T> root, string filePath, string adress = "")
+        private void MakeStoreableString(Node root, ref string storeable, string address = "")
         {
             if (root == null)
             {   
@@ -134,11 +130,118 @@ namespace BinaryTree
             
             else
             {
-                SendToFile(root, adress);
-                SearchTreeForAdresses(root.LeftChild, filePath, adress + "l");
-                SearchTreeForAdresses(root.RightChild, filePath, adress + "r");
+                storeable += root.data.ToString() + "*" + address + ";\n";
+                MakeStoreableString(root.LeftChild, ref storeable, address + "l");
+                MakeStoreableString(root.RightChild, ref storeable, address + "r");
             }
         }
+
+        public void StoreTreeToFile(Node root, string filePath)
+        {
+            string storeableString = string.Empty;
+            MakeStoreableString(root, ref storeableString);
+            File.WriteAllText(filePath, storeableString);
+        }
+
+        private void MakeNodeFromAdress(string line)
+        {
+            bool readingData = true;
+            bool nodeCreated = false;
+            Node root = Root;
+            StringBuilder data = new StringBuilder();
+
+            foreach (char c in line) 
+            {
+                if (c == '*' & readingData == true) //first of all, read data
+                {
+                    readingData = false;
+                }
+                else if (readingData == true)
+                {
+                    data.Append(c);
+                }
+                else if (c == '*' & readingData == false) //if there are two '*' chars, smth's wrong
+                {
+                    throw new Exception("File was not build correctly, cannot make node from it!");
+                }   
+                else    //Then manage making nodes
+                {   
+                    try
+                    {
+                        if (c == 'l' & nodeCreated == false)
+                        {
+                            if (root.LeftChild == null)
+                            {
+                                AddNode(root, data.ToString());
+                                nodeCreated = true;
+                                continue;
+                            }
+                            root = root.LeftChild;
+                        }
+                        else if (c == 'r' & nodeCreated == false)
+                        {
+                            if (root.RightChild == null)
+                            {
+                                AddNode(root, data.ToString(), true);
+                                nodeCreated = true;
+                                continue;
+                            }
+                            root = root.RightChild;
+                        }
+                        else if (c == ';' & nodeCreated == false)
+                        {
+                            if (root != null)
+                            {
+                                root.data = data.ToString();
+                            }
+                        }
+                        else if (c == ';' & nodeCreated == true)
+                        {
+                            break;
+                        }
+                        else
+                            throw new Exception("Attempt to create two nodes from one adress!");
+                    }
+                    catch   //if AddNode creates exception due to more than 2 childs
+                    {
+                        throw new Exception("File was not built correctly and cannot be converted to tree!");
+                    }     
+                }  
+            }
+        }
+
+
+        public Node LoadTreeFromFile(string filePath)
+        {
+            if (File.Exists(filePath) == false)
+                throw new Exception("File does NOT exist!");
+
+            List<string> lines = File.ReadAllLines(filePath).ToList();
+            
+            foreach (string line in lines)
+            {
+                MakeNodeFromAdress(line);
+            }
+
+            return null;
+        }
+
+        public void MakeReadableFile(Node root) // TO DO
+        {
+            Node currentNode = root;
+            StringBuilder toFile = new StringBuilder(currentNode.data);
+            string betweenChilds = "_____", branch = "\"
+
+            while (currentNode != null)
+            {
+                if (currentNode.RightChild != null)
+                {
+
+                }
+            }
+        }
+
+
 
     }
 }

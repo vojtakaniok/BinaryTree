@@ -6,17 +6,20 @@ using System.Threading.Tasks;
 
 namespace BinaryTree
 {
-    class Node<T>
+    class Node
     {
         public int UniqNumber { set; get; }
 
-        public Node<T> Parent { set; get; }
-        public Node<T> LeftChild { set; get; }
-        public Node<T> RightChild { set; get; }
-        public T data { set; get; }
+        public Node Parent { set; get; }
+        public Node LeftChild { set; get; }
+        public Node RightChild { set; get; }
+        public string data { set; get; }
 
-        public Node(int uniqNumber, Node<T> parent, T data)
+        public Node(int uniqNumber, Node parent, string data)
         {
+            if (data.ToString().Contains("*") ^ data.ToString().Contains(";"))
+                throw new Exception("Data cannot contain '*' or ';' character!");
+
             this.UniqNumber = uniqNumber;
             this.data = data;
             this.LeftChild = null;
@@ -24,7 +27,7 @@ namespace BinaryTree
             this.Parent = parent;
         }
 
-        public Node(int uniqNumber, Node<T> parent)
+        public Node(int uniqNumber, Node parent)
         {
             this.UniqNumber = uniqNumber;
             this.Parent = parent;

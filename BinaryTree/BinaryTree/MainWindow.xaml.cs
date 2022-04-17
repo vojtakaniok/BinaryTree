@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.IO;
 
 namespace BinaryTree
 {
@@ -23,14 +25,14 @@ namespace BinaryTree
         public MainWindow()
         {
             InitializeComponent();
-            var newtree = new Tree<string>("God");
+            var newtree = new Tree();
+            var path = @"binTree.txt";
+            Debug.WriteLine(Directory.GetCurrentDirectory());
 
-            newtree.AddNode("Petr");
-            newtree.AddNode("Pavel");
-            newtree.AddNode(newtree.FirstNode.LeftChild,"Martin");
-            newtree.AddNode(newtree.FirstNode.RightChild, "Jakub");
-            newtree.AddNode(newtree.FirstNode.RightChild, "Iva");
-            newtree.StoreToFile(newtree.FirstNode, "s");
+            string[] Lines = new string[] { "God*;", "Petr*l;", "Martin*ll;", "Pavel*r;", "Jakub*rl;", "Gustav*llr;", "Patrik*llrr;",
+                                            "Iveta*rlr;", "Filip*llrrl;", "Thomas*lr;", "Marek*lrr;", "Standa*lrrl;"};
+            newtree.LoadTreeFromFile(path);
+            newtree.StoreTreeToFile(newtree.Root, path);
         }
     }
 }
