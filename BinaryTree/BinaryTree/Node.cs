@@ -10,7 +10,7 @@ namespace BinaryTree
     {
         public int UniqNumber { set; get; }
 
-        public Node Parent { set; get; }
+        public Node Parent { private set; get; }
         public Node LeftChild { set; get; }
         public Node RightChild { set; get; }
         public string data { set; get; }

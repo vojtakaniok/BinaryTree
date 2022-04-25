@@ -12,6 +12,7 @@ namespace BinaryTree
     {
         public Node Root { set; get; }
         private int AmountOfNodes;
+        
         public Tree(string data)
         {
             AmountOfNodes = 0;
@@ -24,28 +25,6 @@ namespace BinaryTree
             AmountOfNodes = 0;
             Root = new Node(AmountOfNodes, null);
             AmountOfNodes++;
-        }
-
-        public int AddNode(string data)
-        {
-            if (data.ToString().Contains("*") ^ data.ToString().Contains(";"))
-                throw new Exception("Data cannot contain '*' or ';' character!");
-
-
-            if (Root.LeftChild == null)
-            {
-                Root.LeftChild = new Node(AmountOfNodes, Root, data);
-                AmountOfNodes++;
-                return AmountOfNodes - 1;
-            }
-            else if (Root.RightChild == null)
-            {
-                Root.RightChild = new Node(AmountOfNodes, Root, data);
-                AmountOfNodes++;
-                return AmountOfNodes - 1;
-            }
-            else
-                throw new Exception("Node can't have more than two children!");
         }
 
         public int AddNode(Node node, string data, bool startWithRight = false)
@@ -103,15 +82,15 @@ namespace BinaryTree
 
         public int DeleteNode(int uniqNumber)
         {
-            Node node1 = FindNode(uniqNumber);
-            Node node2 = node1;
-            node1 = node1.Parent;
-            if (node1.LeftChild == node2)
+            Node parentNode = FindNode(uniqNumber);
+            Node child = parentNode;
+            parentNode = parentNode.Parent;
+            if (parentNode.LeftChild == child)
             {
-                node1.LeftChild = null;
+                parentNode.LeftChild = null;
             }
             else
-                node1.RightChild = null;
+                parentNode.RightChild = null;
             AmountOfNodes--;
             return uniqNumber;
         }
@@ -210,7 +189,6 @@ namespace BinaryTree
             }
         }
 
-
         public Node LoadTreeFromFile(string filePath)
         {
             if (File.Exists(filePath) == false)
@@ -225,23 +203,6 @@ namespace BinaryTree
 
             return null;
         }
-
-        public void MakeReadableFile(Node root) // TO DO
-        {
-            Node currentNode = root;
-            StringBuilder toFile = new StringBuilder(currentNode.data);
-            string betweenChilds = "_____", branch = "\"
-
-            while (currentNode != null)
-            {
-                if (currentNode.RightChild != null)
-                {
-
-                }
-            }
-        }
-
-
 
     }
 }
