@@ -10,10 +10,32 @@ namespace BinaryTree
     {
         public int UniqNumber { set; get; }
 
+        public int Depth 
+        {   
+            get
+            {
+                return getDepth();
+            }
+        }
+
         public Node Parent { private set; get; }
         public Node LeftChild { set; get; }
         public Node RightChild { set; get; }
         public string data { set; get; }
+
+        private int getDepth()
+        {
+            int depth = 0;
+            Node node = this;
+            while (node.Parent != null)
+            {
+                node = node.Parent;
+                depth++;
+            }
+
+            return depth;
+        }
+
 
         public Node(int uniqNumber, Node parent, string data)
         {

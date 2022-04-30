@@ -28,13 +28,15 @@ namespace BinaryTree
             var newtree = new Tree();
             var path = @"binTree.txt";
             Debug.WriteLine(Directory.GetCurrentDirectory());
-            ReadableTextFile sw = new ReadableTextFile(newtree.Root);
 
             newtree.LoadTreeFromFile(path);
             newtree.StoreTreeToFile(newtree.Root, path);
-            Debug.WriteLine("Depth: " + sw.DepthOfTree + "\nWidth: "+ sw.WidthOfTree);
-            for (int i = 0; i < 16; i++)
-                Debug.WriteLine(i + ": " + newtree.ShowData(i));
+
+            ReadableTextFile sw = new ReadableTextFile(newtree.Root);
+            Debug.WriteLine("Depth: " + sw.DepthOfTree + "\nWidth: " + sw.WidthOfTree);
+            sw.StoreToFile(@"Readable.txt");
+            for (int i = 0; i < 5; i++)
+                Console.WriteLine((int)Math.Pow(2, i) * 3 + (int)Math.Pow(2, i) - 1);
         }
     }
 }

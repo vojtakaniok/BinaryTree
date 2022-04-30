@@ -4,16 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using System.Diagnostics;
 
 namespace BinaryTree
 {
-    class ReadableTextFile      // TO DO
+    class ReadableTextFile
     {
         private readonly Node root;
-
-        private List<string> lines = new List<string>();
         int currentDepth, lengthOfData;
-        private List<List<string>> matrix = new List<List<string>>();
+        private List<string> lines = new List<string>();
 
         public int DepthOfTree
         {
@@ -21,51 +20,109 @@ namespace BinaryTree
         }
         public int WidthOfTree
         {
-            get { return (int)Math.Pow(2, GetDepth(root)); }
+            get { return (int)Math.Pow(2, DepthOfTree) * 3 + (int)Math.Pow(2, DepthOfTree) - 1; }
         }
 
-        private void createMatrix()
+
+        public void StoreToFile(string filePath)
         {
-            int amountOfLines = WidthOfTree - 1;
+            string text = string.Empty;
 
-            for (int i = 0; i < amountOfLines; i++)
+            foreach (var line in lines)
             {
-                matrix.Add(new List<string>());
+                Debug.WriteLine(line);
+                text += line + '\n';
             }
+
+
+            File.WriteAllText(filePath, text);
         }
 
-        public ReadableTextFile(Node root, int lengthOfData = 8)
+        private void prepareLines()
+        {
+            for (int i = 0; i < WidthOfTree; i++)
+            {
+                lines.Add(string.Empty);
+            }
+
+        }
+
+        private int getNumberOfLine(Node node)
+        {
+            int defaultPosition = WidthOfTree / 2;
+            int changeOfPosition = 0;
+            
+
+            while (node != root)
+            {
+                int move = (int)Math.Pow(2, DepthOfTree + 1 - node.Depth );
+                if (node.Parent.LeftChild == node)
+                {
+                    changeOfPosition += move;
+                }
+                else
+                {
+                    changeOfPosition -= move;
+                }
+                node = node.Parent;
+            }
+            return defaultPosition + changeOfPosition;
+            
+        }
+
+        private void printTree(Node root)
+        {
+            if (root == null)
+                throw new Exception("There is nothing to print!");
+
+            int widthOfText = (int)Math.Pow(2, DepthOfTree) * 3 + (int)Math.Pow(2, DepthOfTree) - 1;
+            List<Node> unexploredNodes = new List<Node>();
+            Node actualNode = root;
+            int numberOfLine = widthOfText / 2;
+
+            for (int i = 0; i < widthOfText; i++)
+            {
+                if (i == numberOfLine)
+                    lines[i] += actualNode.data.PadRight(lengthOfData, '-');
+                else
+                    lines[i] += new string(' ', lengthOfData);
+            }
+
+            do
+            {   
+                if (unexploredNodes.Count != 0)
+                    unexploredNodes.Remove(unexploredNodes[0]);
+                if (actualNode.RightChild != null)
+                {
+                    unexploredNodes.Add(actualNode.RightChild);
+                }
+
+                if (actualNode.LeftChild != null)
+                {
+                    unexploredNodes.Add(actualNode.LeftChild);
+                }
+                if (actualNode.LeftChild != null | actualNode.RightChild != null)
+                    printBranch(numberOfLine, actualNode);
+
+                if (unexploredNodes.Count > 0)
+                    actualNode = unexploredNodes[0];
+
+                widthOfText = (int)Math.Pow(2, DepthOfTree - actualNode.Depth) * 3 + (int)Math.Pow(2, DepthOfTree - actualNode.Depth) - 1;
+                numberOfLine = getNumberOfLine(actualNode);
+
+            }
+            while (unexploredNodes.Count != 0);
+        }
+
+        public ReadableTextFile(Node root, int lengthOfData = 6)
         {
             this.root = root;
             this.lengthOfData = lengthOfData;
             this.currentDepth = 0;
-            createMatrix();
+            prepareLines();
+            printTree(root);
         }
 
-        private void printNodes(int currentDepth)
-        {
-            if (currentDepth == 0)
-            {
-
-            }
-            else
-            {
-
-            }
-
-            for (int i = 0; i < matrix.Count; i++)
-            {   
-                if (i == ) //there's a node to draw
-                {
-
-                }
-                else
-                {
-                    matrix[i].Add("        ");
-                }
-                
-            }
-        }
         
         private void ExploreTree(Node node, ref List<int> elements) // goes from 
         {
@@ -93,7 +150,46 @@ namespace BinaryTree
             currentDepth = 0;
             List<int> elements = new List<int>();
             ExploreTree(root, ref elements);
-            return elements.Count;
+            return elements.Count - 1;
+        }
+
+        private void printBranch(int numberOfLine, Node root)
+        {
+            int widthOfText = (int)Math.Pow(2, DepthOfTree - root.Depth) * 3 + (int)Math.Pow(2, DepthOfTree - root.Depth) - 1; //whole width
+            int border = (int)Math.Pow(2, DepthOfTree - root.Depth);
+
+            for (int i = 0; i < widthOfText / 2 + 1; i++)
+            {   
+                if (i == 0)
+                {
+                    lines[numberOfLine] += "|  " + new string(' ', lengthOfData);
+                }
+                else if ( i > border)
+                {
+                    lines[numberOfLine + i] += "   " + new string(' ', lengthOfData);
+                    lines[numberOfLine - i] += "   " + new string(' ', lengthOfData);
+                }
+                else if (i == border) 
+                {
+                    lines[numberOfLine + i] += "|--";
+                    lines[numberOfLine - i] += "|--";
+
+                    if (root.RightChild != null)
+                        lines[numberOfLine - i] += root.RightChild.data.PadRight(lengthOfData, '-');
+                    else
+                        lines[numberOfLine - i] += "NULL";
+
+                    if (root.LeftChild != null)
+                        lines[numberOfLine + i] += root.LeftChild.data.PadRight(lengthOfData, '-');
+                    else
+                        lines[numberOfLine + i] += "NULL";
+                }
+                else
+                {
+                    lines[numberOfLine + i] += "|  " + new string(' ', lengthOfData);
+                    lines[numberOfLine - i] += "|  " + new string(' ', lengthOfData);
+                }
+            }
         }
 
     }
