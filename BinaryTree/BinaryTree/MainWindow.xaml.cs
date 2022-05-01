@@ -20,7 +20,7 @@ namespace BinaryTree
 
 
             newTree.LoadTreeFromFile(path);
-            TreeView.ItemsSource = newTree.Root;
+            BinaryTree.ItemsSource = newTree.Root;
             newTree.StoreTreeToFile(newTree.Root, path);
 
             var sw = new ReadableTextFile(newTree.Root, newTree.MaxLength);
