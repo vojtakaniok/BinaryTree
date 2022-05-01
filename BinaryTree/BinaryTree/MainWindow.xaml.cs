@@ -17,7 +17,10 @@ namespace BinaryTree
             var path = @"binTree.txt";
             Debug.WriteLine(Directory.GetCurrentDirectory());
 
+
+
             newTree.LoadTreeFromFile(path);
+            TreeView.ItemsSource = newTree.Root;
             newTree.StoreTreeToFile(newTree.Root, path);
 
             var sw = new ReadableTextFile(newTree.Root, newTree.MaxLength);

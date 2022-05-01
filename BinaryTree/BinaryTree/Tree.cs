@@ -12,18 +12,18 @@ namespace BinaryTree
         public Tree(string data)
         {
             _amountOfNodes = 0;
-            Root = new Node(_amountOfNodes, null, data);
+            Root.Insert(0, new Node(_amountOfNodes, null, data));
             _amountOfNodes++;
         }
 
         public Tree()
         {
             _amountOfNodes = 0;
-            Root = new Node(_amountOfNodes, null);
+            Root.Insert(0,new Node(_amountOfNodes, null));
             _amountOfNodes++;
         }
 
-        public Node Root { set; get; }
+        public List<Node> Root { get; } = new List<Node>();
         public int MaxLength { get; private set; }
 
         public int AddNode(Node node, string data, bool startWithRight = false)
@@ -52,7 +52,7 @@ namespace BinaryTree
 
         public Node FindNode(int uniqNumber)
         {
-            var node = Root;
+            var node = Root.ElementAt(0);
             var list = new List<Node>(); // list of unexplored nodes.
             var smthToExplore = false;
 
@@ -84,11 +84,18 @@ namespace BinaryTree
         public int DeleteNode(int uniqNumber)
         {
             var child = FindNode(uniqNumber);
+
+            //TODO refactor
+            DeleteNode(child.LeftChild.UniqNumber);
+            DeleteNode(child.RightChild.UniqNumber);
+
+
             var parentNode = child.Parent;
             if (parentNode.LeftChild == child)
                 parentNode.LeftChild = null;
             else
                 parentNode.RightChild = null;
+            
             _amountOfNodes--;
             return uniqNumber;
         }
@@ -108,19 +115,19 @@ namespace BinaryTree
             }
         }
 
-        public void StoreTreeToFile(Node root, string filePath)
+        public void StoreTreeToFile(List<Node> root, string filePath)
         {
             var storableString = string.Empty;
             if (root != null)
             {
-                MakeStorableString(root, ref storableString);
+                MakeStorableString(root.ElementAt(0), ref storableString);
                 File.WriteAllText(filePath, storableString);
             }
         }
 
         private void MakeNodeFromAddress(string line)
         {
-            var root = Root;
+            var root = Root.ElementAt(0);
             var data = line.Substring(0, line.IndexOf('*'));
             var address = line.Substring(line.LastIndexOf('*') + 1);
             var i = 1;

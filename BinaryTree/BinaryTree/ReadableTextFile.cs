@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 
 namespace BinaryTree
 {
@@ -88,13 +89,13 @@ namespace BinaryTree
             } while (unexploredNodes.Count != 0);
         }
 
-        public ReadableTextFile(Node root, int lengthOfData)
+        public ReadableTextFile(List<Node> root, int lengthOfData)
         {
-            _root = root;
+            _root = root.ElementAt(0);
             _lengthOfData = lengthOfData;
             _currentDepth = 0;
             PrepareLines();
-            PrintTree(root);
+            PrintTree(_root);
         }
 
 
