@@ -84,11 +84,18 @@ namespace BinaryTree
         public int DeleteNode(int uniqNumber)
         {
             var child = FindNode(uniqNumber);
+
+            //TODO refactor
+            DeleteNode(child.LeftChild.UniqNumber);
+            DeleteNode(child.RightChild.UniqNumber);
+
+
             var parentNode = child.Parent;
             if (parentNode.LeftChild == child)
                 parentNode.LeftChild = null;
             else
                 parentNode.RightChild = null;
+            
             _amountOfNodes--;
             return uniqNumber;
         }
