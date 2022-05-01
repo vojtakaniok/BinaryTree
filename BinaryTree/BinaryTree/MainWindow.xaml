@@ -7,6 +7,14 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
+        <TreeView x:Name="TreeView">
+            <TreeView.ItemTemplate>
+                <HierarchicalDataTemplate DataType="{x:Type local:Node}" ItemsSource="{Binding Child}" >
+                    <TextBlock Text="{Binding Path=Data}"/>
+                </HierarchicalDataTemplate>
+                
+            </TreeView.ItemTemplate>
+        </TreeView>
         
     </Grid>
 </Window>

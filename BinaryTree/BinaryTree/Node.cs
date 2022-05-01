@@ -1,9 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using System.Windows.Documents;
 
 namespace BinaryTree
 {
     internal class Node
     {
+        public List<Node> Child { get; } = new List<Node>();
+
         public Node(int uniqNumber, Node parent, string data)
         {
             if (data.Contains("*") ^ data.Contains(";"))
@@ -14,6 +20,15 @@ namespace BinaryTree
             LeftChild = null;
             RightChild = null;
             Parent = parent;
+        }
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void onChange(string propertyName)
+        {
+            if (PropertyChanged != null)
+            {
+                this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            }
         }
 
         public Node(int uniqNumber, Node parent)
@@ -27,8 +42,18 @@ namespace BinaryTree
         public int Depth => GetDepth();
 
         public Node Parent { get; }
-        public Node LeftChild { set; get; }
-        public Node RightChild { set; get; }
+
+        public Node LeftChild
+        {
+            set => Child.Insert(0,value);
+            get => Child.ElementAtOrDefault(0);
+        }
+
+        public Node RightChild
+        {
+            set => Child.Insert(1, value);
+            get => Child.ElementAtOrDefault(1);
+        }
         public string Data { set; get; }
 
         private int GetDepth()
