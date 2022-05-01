@@ -113,9 +113,9 @@ namespace BinaryTree
 
         public void StoreTreeToFile(Node root, string filePath)
         {
-            var storeableString = string.Empty;
-            MakeStorableString(root, ref storeableString);
-            File.WriteAllText(filePath, storeableString);
+            var storableString = string.Empty;
+            MakeStorableString(root, ref storableString);
+            File.WriteAllText(filePath, storableString);
         }
 
         private void MakeNodeFromAddress(string line)
