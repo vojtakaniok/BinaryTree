@@ -131,10 +131,10 @@ namespace BinaryTree
 
         private void PrintBranch(int numberOfLine, Node rootNode) // print whole branch, including empty space
         {
-            var widthOfText = (int) Math.Pow(2, DepthOfTree - rootNode.Depth - 1) * 4 - 1;
+            var widthOfBranch = (int) Math.Pow(2, DepthOfTree - rootNode.Depth - 1) * 4 - 1;
             var border = (int) Math.Pow(2, DepthOfTree - rootNode.Depth - 1);
 
-            for (var i = 0; i < widthOfText / 2 + 1; i++)
+            for (var i = 0; i < widthOfBranch / 2 + 1; i++)
                 if (i == 0)
                 {
                     _lines[numberOfLine] += "|  " + new string(' ', _lengthOfData);
