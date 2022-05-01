@@ -2,15 +2,12 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 
 namespace BinaryTree
 {
     internal class Tree
     {
-        public Node Root { set; get; }
         private int _amountOfNodes;
-        public int MaxLength { get; private set; } = 0;
 
         public Tree(string data)
         {
@@ -26,11 +23,14 @@ namespace BinaryTree
             _amountOfNodes++;
         }
 
+        public Node Root { set; get; }
+        public int MaxLength { get; private set; }
+
         public int AddNode(Node node, string data, bool startWithRight = false)
         {
             if (data.Contains("*") ^ data.Contains(";"))
                 throw new Exception("Data cannot contain '*' or ';' character!");
-            if(MaxLength < data.Length)
+            if (MaxLength < data.Length)
                 MaxLength = data.Length;
 
             if ((node.LeftChild == null) & (startWithRight == false))
@@ -120,60 +120,42 @@ namespace BinaryTree
 
         private void MakeNodeFromAddress(string line)
         {
-            var readingData = true;
-            var nodeCreated = false;
             var root = Root;
-            var data = new StringBuilder();
+            var data = line.Substring(0, line.IndexOf('*'));
+            var address = line.Substring(line.LastIndexOf('*') + 1);
+            var i = 1;
+            var searching = true;
+            if (string.IsNullOrWhiteSpace(address))
+                root.Data = data;
 
-            foreach (var c in line)
-                if ((c == '*') & readingData) //first of all, read data
-                    readingData = false;
-                else if (readingData)
-                    data.Append(c);
-                else if (c == '*') //if there are two '*' chars, smth's wrong
-                    throw new Exception("File was not build correctly, cannot make node from it!");
-                else //Then manage making nodes
-                    try
-                    {
-                        if ((c == 'l') & (nodeCreated == false))
+            foreach (var c in address)
+            {
+                if (i == address.Length) searching = false;
+                i++;
+                switch (c)
+                {
+                    case 'l':
+                        if (searching)
                         {
-                            if (root != null && root.LeftChild == null)
-                            {
-                                AddNode(root, data.ToString());
-                                nodeCreated = true;
-                                continue;
-                            }
-
-                            root = root?.LeftChild;
-                        }
-                        else if ((c == 'r') & (nodeCreated == false))
-                        {
-                            if (root != null && root.RightChild == null)
-                            {
-                                AddNode(root, data.ToString(), true);
-                                nodeCreated = true;
-                                continue;
-                            }
-
-                            root = root?.RightChild;
-                        }
-                        else if ((c == ';') & (nodeCreated == false))
-                        {
-                            if (root != null) root.Data = data.ToString();
-                        }
-                        else if ((c == ';') & nodeCreated)
-                        {
+                            root = root.LeftChild;
                             break;
                         }
-                        else
+
+                        AddNode(root, data);
+                        break;
+                    case 'r':
+                        if (searching)
                         {
-                            throw new Exception("Attempt to create two nodes from one address!");
+                            root = root.RightChild;
+                            break;
                         }
-                    }
-                    catch //if AddNode creates exception due to more than 2 child
-                    {
-                        throw new Exception("File was not built correctly and cannot be converted to tree!");
-                    }
+
+                        AddNode(root, data, true);
+                        break;
+                    default:
+                        throw new Exception();
+                }
+            }
         }
 
         public Node LoadTreeFromFile(string filePath)
