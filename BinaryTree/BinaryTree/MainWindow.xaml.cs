@@ -1,24 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.IO;
+using System.Windows;
 
 namespace BinaryTree
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    ///     Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
     {
@@ -32,11 +20,11 @@ namespace BinaryTree
             newTree.LoadTreeFromFile(path);
             newTree.StoreTreeToFile(newTree.Root, path);
 
-            var sw = new ReadableTextFile(newTree.Root);
+            var sw = new ReadableTextFile(newTree.Root, 6);
             Debug.WriteLine("Depth: " + sw.DepthOfTree + "\nWidth: " + sw.WidthOfTree);
             sw.StoreToFile(@"Readable.txt");
             for (var i = 0; i < 5; i++)
-                Console.WriteLine((int)Math.Pow(2, i) * 3 + (int)Math.Pow(2, i) - 1);
+                Console.WriteLine((int) Math.Pow(2, i) * 3 + (int) Math.Pow(2, i) - 1);
         }
     }
 }
