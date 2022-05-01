@@ -10,11 +10,8 @@ namespace BinaryTree
     {
         public Node Root { set; get; }
         private int _amountOfNodes;
-        private int _maxLeght = 0;
-        public int MaxLeght
-        {
-            get { return _maxLeght; }
-        }
+        private int _maxLength = 0;
+        public int MaxLength => _maxLength;
 
         public Tree(string data)
         {
@@ -34,8 +31,8 @@ namespace BinaryTree
         {
             if (data.Contains("*") ^ data.Contains(";"))
                 throw new Exception("Data cannot contain '*' or ';' character!");
-            if(_maxLeght < data.Length)
-                _maxLeght = data.Length;
+            if(_maxLength < data.Length)
+                _maxLength = data.Length;
 
             if ((node.LeftChild == null) & (startWithRight == false))
             {
