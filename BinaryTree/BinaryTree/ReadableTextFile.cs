@@ -171,12 +171,12 @@ namespace BinaryTree
                     if (rootNode.RightChild != null)
                         _lines[numberOfLine - i] += rootNode.RightChild.Data.PadRight(_lengthOfData, '-');
                     else
-                        _lines[numberOfLine - i] += "NULL";
+                        _lines[numberOfLine - i] += "";
 
                     if (rootNode.LeftChild != null)
                         _lines[numberOfLine + i] += rootNode.LeftChild.Data.PadRight(_lengthOfData, '-');
                     else
-                        _lines[numberOfLine + i] += "NULL";
+                        _lines[numberOfLine + i] += "";
                 }
                 else
                 {
