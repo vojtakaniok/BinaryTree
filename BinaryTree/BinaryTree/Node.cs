@@ -1,32 +1,22 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BinaryTree
 {
-    class Node
+    internal class Node
     {
         public int UniqNumber { set; get; }
 
-        public int Depth 
-        {   
-            get
-            {
-                return getDepth();
-            }
-        }
+        public int Depth => GetDepth();
 
         public Node Parent { private set; get; }
         public Node LeftChild { set; get; }
         public Node RightChild { set; get; }
-        public string data { set; get; }
+        public string Data { set; get; }
 
-        private int getDepth()
+        private int GetDepth()
         {
-            int depth = 0;
-            Node node = this;
+            var depth = 0;
+            var node = this;
             while (node.Parent != null)
             {
                 node = node.Parent;
@@ -39,20 +29,20 @@ namespace BinaryTree
 
         public Node(int uniqNumber, Node parent, string data)
         {
-            if (data.ToString().Contains("*") ^ data.ToString().Contains(";"))
+            if (data.Contains("*") ^ data.Contains(";"))
                 throw new Exception("Data cannot contain '*' or ';' character!");
 
-            this.UniqNumber = uniqNumber;
-            this.data = data;
-            this.LeftChild = null;
-            this.RightChild = null;
-            this.Parent = parent;
+            UniqNumber = uniqNumber;
+            Data = data;
+            LeftChild = null;
+            RightChild = null;
+            Parent = parent;
         }
 
         public Node(int uniqNumber, Node parent)
         {
-            this.UniqNumber = uniqNumber;
-            this.Parent = parent;
+            UniqNumber = uniqNumber;
+            Parent = parent;
         }
     }
 }

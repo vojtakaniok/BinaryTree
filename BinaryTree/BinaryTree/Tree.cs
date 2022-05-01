@@ -2,64 +2,63 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.IO;
-using System.Diagnostics;
 
 namespace BinaryTree
 {
-    class Tree
+    internal class Tree
     {
         public Node Root { set; get; }
-        private int AmountOfNodes;
+        private int _amountOfNodes;
         
         public Tree(string data)
         {
-            AmountOfNodes = 0;
-            Root = new Node(AmountOfNodes, null, data);
-            AmountOfNodes++;
+            _amountOfNodes = 0;
+            Root = new Node(_amountOfNodes, null, data);
+            _amountOfNodes++;
         }
 
         public Tree()
         {
-            AmountOfNodes = 0;
-            Root = new Node(AmountOfNodes, null);
-            AmountOfNodes++;
+            _amountOfNodes = 0;
+            Root = new Node(_amountOfNodes, null);
+            _amountOfNodes++;
         }
 
         public int AddNode(Node node, string data, bool startWithRight = false)
         {
-            if (data.ToString().Contains("*") ^ data.ToString().Contains(";"))
+            if (data.Contains("*") ^ data.Contains(";"))
                 throw new Exception("Data cannot contain '*' or ';' character!");
 
             if (node.LeftChild == null & startWithRight == false)
             {
-                node.LeftChild = new Node(AmountOfNodes, node, data);
-                AmountOfNodes++;
-                return AmountOfNodes - 1;
+                node.LeftChild = new Node(_amountOfNodes, node, data);
+                _amountOfNodes++;
+                return _amountOfNodes - 1;
             }
-            else if (node.RightChild == null)
+
+            if (node.RightChild == null)
             {
-                node.RightChild = new Node(AmountOfNodes, node, data);
-                AmountOfNodes++;
-                return AmountOfNodes - 1;
+                node.RightChild = new Node(_amountOfNodes, node, data);
+                _amountOfNodes++;
+                return _amountOfNodes - 1;
             }
-            else
-                throw new Exception("Node can't have more than two children!");
+
+            throw new Exception("Node can't have more than two children!");
         }
 
         public Node FindNode(int uniqNumber)
         {
-            Node node = Root;
-            List<Node> list = new List<Node>();   // list of unexplored nodes.
-            bool SmthToExplore = false;
+            var node = Root;
+            var list = new List<Node>();   // list of unexplored nodes.
+            var smthToExplore = false;
 
             do
             {
                 if (node.UniqNumber == uniqNumber)
                     return node;
                 if (list.Count > 0)
-                    SmthToExplore = true;
+                    smthToExplore = true;
 
                 if (node.LeftChild != null)     // If there's left child, jump into it. Save RightChild, if possible
                 {
@@ -75,15 +74,15 @@ namespace BinaryTree
                     list.Remove(list[0]); //remove exploring node from the list
                 }
 
-            } while (!(node.RightChild == null & node.LeftChild == null & SmthToExplore == false));
+            } while (!(node.RightChild == null & node.LeftChild == null & smthToExplore == false));
 
             throw new Exception("There is no node with that UniqNumber!");
         }
 
         public int DeleteNode(int uniqNumber)
         {
-            Node parentNode = FindNode(uniqNumber);
-            Node child = parentNode;
+            var parentNode = FindNode(uniqNumber);
+            var child = parentNode;
             parentNode = parentNode.Parent;
             if (parentNode.LeftChild == child)
             {
@@ -91,55 +90,52 @@ namespace BinaryTree
             }
             else
                 parentNode.RightChild = null;
-            AmountOfNodes--;
+            _amountOfNodes--;
             return uniqNumber;
         }
 
         public string ShowData(int uniqNumber)
         {
-            return FindNode(uniqNumber).data;
+            return FindNode(uniqNumber).Data;
         }
 
-        private void MakeStoreableString(Node root, ref string storeable, string address = "")
+        private void MakeStorableString(Node root, ref string storable, string address = "")
         {
-            if (root == null)
-            {   
-                return;
+            if (root != null)
+            {
+                storable += root.Data + "*" + address + ";\n";
+                MakeStorableString(root.LeftChild, ref storable, address + "l");
+                MakeStorableString(root.RightChild, ref storable, address + "r");
             }    
             
-            else
-            {
-                storeable += root.data.ToString() + "*" + address + ";\n";
-                MakeStoreableString(root.LeftChild, ref storeable, address + "l");
-                MakeStoreableString(root.RightChild, ref storeable, address + "r");
-            }
+   
         }
 
         public void StoreTreeToFile(Node root, string filePath)
         {
-            string storeableString = string.Empty;
-            MakeStoreableString(root, ref storeableString);
+            var storeableString = string.Empty;
+            MakeStorableString(root, ref storeableString);
             File.WriteAllText(filePath, storeableString);
         }
 
-        private void MakeNodeFromAdress(string line)
+        private void MakeNodeFromAddress(string line)
         {
-            bool readingData = true;
-            bool nodeCreated = false;
-            Node root = Root;
-            StringBuilder data = new StringBuilder();
+            var readingData = true;
+            var nodeCreated = false;
+            var root = Root;
+            var data = new StringBuilder();
 
-            foreach (char c in line) 
+            foreach (var c in line) 
             {
-                if (c == '*' & readingData == true) //first of all, read data
+                if (c == '*' & readingData) //first of all, read data
                 {
                     readingData = false;
                 }
-                else if (readingData == true)
+                else if (readingData)
                 {
                     data.Append(c);
                 }
-                else if (c == '*' & readingData == false) //if there are two '*' chars, smth's wrong
+                else if (c == '*') //if there are two '*' chars, smth's wrong
                 {
                     throw new Exception("File was not build correctly, cannot make node from it!");
                 }   
@@ -149,32 +145,34 @@ namespace BinaryTree
                     {
                         if (c == 'l' & nodeCreated == false)
                         {
-                            if (root.LeftChild == null)
+                            if (root != null && root.LeftChild == null)
                             {
                                 AddNode(root, data.ToString());
                                 nodeCreated = true;
                                 continue;
                             }
-                            root = root.LeftChild;
+
+                            root = root?.LeftChild;
                         }
                         else if (c == 'r' & nodeCreated == false)
                         {
-                            if (root.RightChild == null)
+                            if (root != null && root.RightChild == null)
                             {
                                 AddNode(root, data.ToString(), true);
                                 nodeCreated = true;
                                 continue;
                             }
-                            root = root.RightChild;
+
+                            root = root?.RightChild;
                         }
                         else if (c == ';' & nodeCreated == false)
                         {
                             if (root != null)
                             {
-                                root.data = data.ToString();
+                                root.Data = data.ToString();
                             }
                         }
-                        else if (c == ';' & nodeCreated == true)
+                        else if (c == ';' & nodeCreated)
                         {
                             break;
                         }
@@ -194,11 +192,11 @@ namespace BinaryTree
             if (File.Exists(filePath) == false)
                 throw new Exception("File does NOT exist!");
 
-            List<string> lines = File.ReadAllLines(filePath).ToList();
+            var lines = File.ReadAllLines(filePath).ToList();
             
-            foreach (string line in lines)
+            foreach (var line in lines)
             {
-                MakeNodeFromAdress(line);
+                MakeNodeFromAddress(line);
             }
 
             return null;
