@@ -1,18 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.IO;
 using System.Diagnostics;
 
 namespace BinaryTree
 {
-    class ReadableTextFile
+    internal class ReadableTextFile
     {
-        private readonly Node root;
-        int currentDepth, lengthOfData;
-        private List<string> lines = new List<string>();
+        private readonly Node _root;
+        private int _currentDepth;
+        private readonly int _lengthOfData;
+        private readonly List<string> _lines = new List<string>();
 
         public int DepthOfTree
         {
@@ -23,12 +21,14 @@ namespace BinaryTree
             get { return (int)Math.Pow(2, DepthOfTree + 1) - 1; }
         }
 
+        public int WidthOfTree => (int)Math.Pow(2, DepthOfTree) * 3 + (int)Math.Pow(2, DepthOfTree) - 1;
+
 
         public void StoreToFile(string filePath)
         {
-            string text = string.Empty;
+            var text = string.Empty;
 
-            foreach (var line in lines)
+            foreach (var line in _lines)
             {
                 Debug.WriteLine(line);
                 text += line + '\n';
@@ -38,22 +38,22 @@ namespace BinaryTree
             File.WriteAllText(filePath, text);
         }
 
-        private void prepareLines()
+        private void PrepareLines()
         {
-            for (int i = 0; i < WidthOfTree; i++)
+            for (var i = 0; i < WidthOfTree; i++)
             {
-                lines.Add(string.Empty);
+                _lines.Add(string.Empty);
             }
 
         }
 
         private int getNumberOfLine(Node node) // returns real position of node according to its parents
         {
-            int defaultPosition = WidthOfTree / 2;
-            int changeOfPosition = 0;
+            var defaultPosition = WidthOfTree / 2;
+            var changeOfPosition = 0;
             
 
-            while (node != root)
+            while (node != _root)
             {
                 int move = (int)Math.Pow(2, DepthOfTree - node.Depth );
                 if (node.Parent.LeftChild == node)
@@ -70,7 +70,7 @@ namespace BinaryTree
             
         }
 
-        private void printTree(Node root)
+        private void PrintTree(Node root)
         {
             if (root == null)
                 throw new Exception("There is nothing to print!");
@@ -83,9 +83,9 @@ namespace BinaryTree
             for (int i = 0; i < widthOfText; i++) // print root
             {
                 if (i == numberOfLine)
-                    lines[i] += actualNode.data.PadRight(lengthOfData, '-');
+                    _lines[i] += actualNode.Data.PadRight(_lengthOfData, '-');
                 else
-                    lines[i] += new string(' ', lengthOfData);
+                    _lines[i] += new string(' ', _lengthOfData);
             }
 
             do   // BFS algorithm, from rightchild to leftchild
@@ -102,13 +102,14 @@ namespace BinaryTree
                     unexploredNodes.Add(actualNode.LeftChild);
                 }
                 if (actualNode.LeftChild != null | actualNode.RightChild != null)
-                    printBranch(numberOfLine, actualNode);
+                    PrintBranch(numberOfLine, actualNode);
 
                 if (unexploredNodes.Count > 0)
                     actualNode = unexploredNodes[0];
 
                 widthOfText = (int)Math.Pow(2, DepthOfTree - actualNode.Depth) * 4 - 1;
-                numberOfLine = getNumberOfLine(actualNode);
+*/
+                numberOfLine = GetNumberOfLine(actualNode);
 
             }
             while (unexploredNodes.Count != 0);
@@ -116,39 +117,38 @@ namespace BinaryTree
 
         public ReadableTextFile(Node root, int lengthOfData)
         {
-            this.root = root;
-            this.lengthOfData = lengthOfData;
-            this.currentDepth = 0;
-            prepareLines();
-            printTree(root);
+            _root = root;
+            _lengthOfData = lengthOfData;
+            _currentDepth = 0;
+            PrepareLines();
+            PrintTree(root);
         }
 
         
         private void ExploreTree(Node node, ref List<int> elements)
         {
-            if (elements.Count <= currentDepth)
+            if (elements.Count <= _currentDepth)
                 elements.Add(1);
             else
-                elements[currentDepth]++;
+                elements[_currentDepth]++;
 
             if (node.LeftChild != null)
             {
-                currentDepth++;
+                _currentDepth++;
                 ExploreTree(node.LeftChild, ref elements);
             }
             if (node.RightChild != null)
             {
-                currentDepth++;
+                _currentDepth++;
                 ExploreTree(node.RightChild, ref elements);
             }
-            currentDepth--;
-            return;
+            _currentDepth--;
         }
 
         private int GetDepth(Node root)
         {
-            currentDepth = 0;
-            List<int> elements = new List<int>();
+            _currentDepth = 0;
+            var elements = new List<int>();
             ExploreTree(root, ref elements);
             return elements.Count - 1;
         }
@@ -160,36 +160,36 @@ namespace BinaryTree
             int widthOfText = (int)Math.Pow(2, DepthOfTree - root.Depth - 1) * 4 - 1;
             int border = (int)Math.Pow(2, DepthOfTree - root.Depth - 1);
 
-            for (int i = 0; i < widthOfText / 2 + 1; i++)
+            for (var i = 0; i < widthOfText / 2 + 1; i++)
             {   
                 if (i == 0)
                 {
-                    lines[numberOfLine] += "|  " + new string(' ', lengthOfData);
+                    _lines[numberOfLine] += "|  " + new string(' ', _lengthOfData);
                 }
                 else if ( i > border)
                 {
-                    lines[numberOfLine + i] += "   " + new string(' ', lengthOfData);
-                    lines[numberOfLine - i] += "   " + new string(' ', lengthOfData);
+                    _lines[numberOfLine + i] += "   " + new string(' ', _lengthOfData);
+                    _lines[numberOfLine - i] += "   " + new string(' ', _lengthOfData);
                 }
                 else if (i == border) 
                 {
-                    lines[numberOfLine + i] += "|--";
-                    lines[numberOfLine - i] += "|--";
+                    _lines[numberOfLine + i] += "|--";
+                    _lines[numberOfLine - i] += "|--";
 
-                    if (root.RightChild != null)
-                        lines[numberOfLine - i] += root.RightChild.data.PadRight(lengthOfData, '-');
+                    if (rootNode.RightChild != null)
+                        _lines[numberOfLine - i] += rootNode.RightChild.Data.PadRight(_lengthOfData, '-');
                     else
-                        lines[numberOfLine - i] += "NULL";
+                        _lines[numberOfLine - i] += "";
 
-                    if (root.LeftChild != null)
-                        lines[numberOfLine + i] += root.LeftChild.data.PadRight(lengthOfData, '-');
+                    if (rootNode.LeftChild != null)
+                        _lines[numberOfLine + i] += rootNode.LeftChild.Data.PadRight(_lengthOfData, '-');
                     else
-                        lines[numberOfLine + i] += "NULL";
+                        _lines[numberOfLine + i] += "";
                 }
                 else
                 {
-                    lines[numberOfLine + i] += "|  " + new string(' ', lengthOfData);
-                    lines[numberOfLine - i] += "|  " + new string(' ', lengthOfData);
+                    _lines[numberOfLine + i] += "|  " + new string(' ', _lengthOfData);
+                    _lines[numberOfLine - i] += "|  " + new string(' ', _lengthOfData);
                 }
             }
         }
