@@ -32,7 +32,7 @@ namespace BinaryTree
             newtree.LoadTreeFromFile(path);
             newtree.StoreTreeToFile(newtree.Root, path);
 
-            ReadableTextFile sw = new ReadableTextFile(newtree.Root);
+            ReadableTextFile sw = new ReadableTextFile(newtree.Root, 6);
             Debug.WriteLine("Depth: " + sw.DepthOfTree + "\nWidth: " + sw.WidthOfTree);
             sw.StoreToFile(@"Readable.txt");
             for (int i = 0; i < 5; i++)

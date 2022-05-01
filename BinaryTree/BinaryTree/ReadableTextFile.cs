@@ -20,7 +20,7 @@ namespace BinaryTree
         }
         public int WidthOfTree
         {
-            get { return (int)Math.Pow(2, DepthOfTree) * 3 + (int)Math.Pow(2, DepthOfTree) - 1; }
+            get { return (int)Math.Pow(2, DepthOfTree + 1) - 1; }
         }
 
 
@@ -47,7 +47,7 @@ namespace BinaryTree
 
         }
 
-        private int getNumberOfLine(Node node)
+        private int getNumberOfLine(Node node) // returns real position of node according to its parents
         {
             int defaultPosition = WidthOfTree / 2;
             int changeOfPosition = 0;
@@ -55,7 +55,7 @@ namespace BinaryTree
 
             while (node != root)
             {
-                int move = (int)Math.Pow(2, DepthOfTree + 1 - node.Depth );
+                int move = (int)Math.Pow(2, DepthOfTree - node.Depth );
                 if (node.Parent.LeftChild == node)
                 {
                     changeOfPosition += move;
@@ -75,12 +75,12 @@ namespace BinaryTree
             if (root == null)
                 throw new Exception("There is nothing to print!");
 
-            int widthOfText = (int)Math.Pow(2, DepthOfTree) * 3 + (int)Math.Pow(2, DepthOfTree) - 1;
+            int widthOfText = this.WidthOfTree;
             List<Node> unexploredNodes = new List<Node>();
             Node actualNode = root;
             int numberOfLine = widthOfText / 2;
 
-            for (int i = 0; i < widthOfText; i++)
+            for (int i = 0; i < widthOfText; i++) // print root
             {
                 if (i == numberOfLine)
                     lines[i] += actualNode.data.PadRight(lengthOfData, '-');
@@ -88,7 +88,7 @@ namespace BinaryTree
                     lines[i] += new string(' ', lengthOfData);
             }
 
-            do
+            do   // BFS algorithm, from rightchild to leftchild
             {   
                 if (unexploredNodes.Count != 0)
                     unexploredNodes.Remove(unexploredNodes[0]);
@@ -107,14 +107,14 @@ namespace BinaryTree
                 if (unexploredNodes.Count > 0)
                     actualNode = unexploredNodes[0];
 
-                widthOfText = (int)Math.Pow(2, DepthOfTree - actualNode.Depth) * 3 + (int)Math.Pow(2, DepthOfTree - actualNode.Depth) - 1;
+                widthOfText = (int)Math.Pow(2, DepthOfTree - actualNode.Depth) * 4 - 1;
                 numberOfLine = getNumberOfLine(actualNode);
 
             }
             while (unexploredNodes.Count != 0);
         }
 
-        public ReadableTextFile(Node root, int lengthOfData = 6)
+        public ReadableTextFile(Node root, int lengthOfData)
         {
             this.root = root;
             this.lengthOfData = lengthOfData;
@@ -124,7 +124,7 @@ namespace BinaryTree
         }
 
         
-        private void ExploreTree(Node node, ref List<int> elements) // goes from 
+        private void ExploreTree(Node node, ref List<int> elements)
         {
             if (elements.Count <= currentDepth)
                 elements.Add(1);
@@ -153,10 +153,12 @@ namespace BinaryTree
             return elements.Count - 1;
         }
 
-        private void printBranch(int numberOfLine, Node root)
+
+
+        private void printBranch(int numberOfLine, Node root)   // print whole branch, including empty space
         {
-            int widthOfText = (int)Math.Pow(2, DepthOfTree - root.Depth) * 3 + (int)Math.Pow(2, DepthOfTree - root.Depth) - 1; //whole width
-            int border = (int)Math.Pow(2, DepthOfTree - root.Depth);
+            int widthOfText = (int)Math.Pow(2, DepthOfTree - root.Depth - 1) * 4 - 1;
+            int border = (int)Math.Pow(2, DepthOfTree - root.Depth - 1);
 
             for (int i = 0; i < widthOfText / 2 + 1; i++)
             {   

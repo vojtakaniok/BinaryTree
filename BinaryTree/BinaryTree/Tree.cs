@@ -118,8 +118,12 @@ namespace BinaryTree
         public void StoreTreeToFile(Node root, string filePath)
         {
             string storeableString = string.Empty;
-            MakeStoreableString(root, ref storeableString);
-            File.WriteAllText(filePath, storeableString);
+            if (root != null)
+            {
+                MakeStoreableString(root, ref storeableString);
+                File.WriteAllText(filePath, storeableString);
+            }
+            
         }
 
         private void MakeNodeFromAdress(string line)
