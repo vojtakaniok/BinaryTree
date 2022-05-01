@@ -81,6 +81,31 @@ namespace BinaryTree
             throw new Exception("There is no node with that UniqNumber!");
         }
 
+        public Node FindNode(string address)
+        {
+            var node = Root.ElementAt(0);
+            foreach (var c in address)
+            {
+
+                switch (c)
+                {
+                    case 'l':
+
+                        node = node.LeftChild;
+                        break;
+                    case 'r':
+
+                        node = node.RightChild;
+
+                        break;
+                    default:
+                        throw new Exception();
+                }
+            }
+
+            return node;
+        }
+
         public int DeleteNode(int uniqNumber)
         {
             var child = FindNode(uniqNumber);
@@ -130,39 +155,18 @@ namespace BinaryTree
             var root = Root.ElementAt(0);
             var data = line.Substring(0, line.IndexOf('*'));
             var address = line.Substring(line.LastIndexOf('*') + 1);
-            var i = 1;
-            var searching = true;
+
             if (string.IsNullOrWhiteSpace(address))
                 root.Data = data;
-
-            foreach (var c in address)
+            else
             {
-                if (i == address.Length) searching = false;
-                i++;
-                switch (c)
-                {
-                    case 'l':
-                        if (searching)
-                        {
-                            root = root.LeftChild;
-                            break;
-                        }
-
-                        AddNode(root, data);
-                        break;
-                    case 'r':
-                        if (searching)
-                        {
-                            root = root.RightChild;
-                            break;
-                        }
-
-                        AddNode(root, data, true);
-                        break;
-                    default:
-                        throw new Exception();
-                }
+                var last = address.ElementAt(address.Length-1);
+                var toSearch = address.Substring(0, address.Length - 1);
+                var node = FindNode(toSearch);
+                AddNode(node, data, last == 'r');
             }
+            
+                  
         }
 
         public Node LoadTreeFromFile(string filePath)
