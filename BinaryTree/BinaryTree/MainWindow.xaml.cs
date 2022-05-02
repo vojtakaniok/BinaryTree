@@ -39,16 +39,38 @@ namespace BinaryTree
         {
             if(String.IsNullOrWhiteSpace(Data.Text))
                 return;
-            var node = BinaryTree.SelectedItem as Node;
-            _newTree.AddNode(node, Data.Text);
+            try
+            {
+                var node = BinaryTree.SelectedItem as Node;
+            
+                _newTree.AddNode(node, Data.Text);
+            }
+            catch (Exception ex)
+            {
+               CreateDialog("Cannot add Left node, Reason:" + ex.Message);
+            }
+        }
+
+        private void CreateDialog(string text)
+        {
+            string txt = "Error";
+            MessageBoxButton button = MessageBoxButton.OK;
+            MessageBoxResult result = MessageBox.Show(text, txt, button);
         }
 
         private void Right_Click(object sender, RoutedEventArgs e)
         {
             if (String.IsNullOrWhiteSpace(Data.Text))
                 return;
-            var node = BinaryTree.SelectedItem as Node;
-            _newTree.AddNode(node, Data.Text, true);
+            try
+            {
+                var node = BinaryTree.SelectedItem as Node;
+                _newTree.AddNode(node, Data.Text, true);
+            }
+            catch (Exception ex)
+            {
+                CreateDialog("Cannot add Right node, Reason:"+ ex.Message);
+            }
         }
 
         private void Save_Click(object sender, RoutedEventArgs e)
