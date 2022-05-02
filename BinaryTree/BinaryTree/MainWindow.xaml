@@ -7,14 +7,19 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        <TreeView x:Name="BinaryTree">
+        <TreeView x:Name="BinaryTree" Margin="0,0,164,0">
             <TreeView.ItemTemplate>
                 <HierarchicalDataTemplate DataType="{x:Type local:Node}" ItemsSource="{Binding Child}" >
                     <TextBlock Text="{Binding Path=Data}"/>
                 </HierarchicalDataTemplate>
-                
+
             </TreeView.ItemTemplate>
         </TreeView>
-        
+        <Button Name="Delete" Content="Delete" HorizontalAlignment="Left" Margin="731,28,0,0" VerticalAlignment="Top" Width="57" Click="Delete_Click"/>
+        <Button Name="AddLeft" Content="Add Left" HorizontalAlignment="Left" Margin="731,97,0,0" VerticalAlignment="Top" Width="58" Click="Left_Click"/>
+        <Button Name="AddRight" Content="Add Right" HorizontalAlignment="Left" Margin="731,122,0,0" VerticalAlignment="Top" Click="Right_Click"/>
+        <TextBox Name="Data" HorizontalAlignment="Left" Height="24" Margin="686,68,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="88"/>
+        <Label Content="Data:" HorizontalAlignment="Left" Height="23" Margin="636,41,0,0" VerticalAlignment="Top" Width="42" RenderTransformOrigin="0.228,0.107"/>
+
     </Grid>
 </Window>

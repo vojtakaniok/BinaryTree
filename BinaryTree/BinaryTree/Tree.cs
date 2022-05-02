@@ -40,45 +40,44 @@ namespace BinaryTree
                 return _amountOfNodes - 1;
             }
 
-            if (node.RightChild == null)
+            if ((node.RightChild == null) & startWithRight)
             {
                 node.RightChild = new Node(_amountOfNodes, node, data);
                 _amountOfNodes++;
                 return _amountOfNodes - 1;
             }
+            
 
             throw new Exception("Node can't have more than two children!");
         }
 
         public Node FindNode(int uniqNumber)
         {
-            var node = Root.ElementAt(0);
-            var list = new List<Node>(); // list of unexplored nodes.
-            var smthToExplore = false;
+            var queue = new Queue<Node>();
+            var visited = new HashSet<Node>();
+            var root = Root.ElementAt(0);
+            if (root.UniqNumber == uniqNumber)
+                return root;
+            queue.Enqueue(root);
+           
 
-            do
+            while (queue.Count > 0)
             {
+                var node = queue.Dequeue();
+                if (visited.Contains(node))
+                    continue;
                 if (node.UniqNumber == uniqNumber)
                     return node;
-                if (list.Count > 0)
-                    smthToExplore = true;
 
-                if (node.LeftChild != null) // If there's left child, jump into it. Save RightChild, if possible
-                {
-                    if (node.RightChild != null)
-                        list.Add(node.RightChild);
-                    node = node.LeftChild;
-                }
-                else // If node has no Left child, save Right child (if possible) and jump into some unexplored nodes.
-                {
-                    if (node.RightChild != null)
-                        list.Add(node.RightChild);
-                    node = list[0]; // jump
-                    list.Remove(list[0]); //remove exploring node from the list
-                }
-            } while (!((node.RightChild == null) & (node.LeftChild == null) & (smthToExplore == false)));
+                visited.Add(node);
+                foreach (var neighbor in node.Child)
+                    if (!visited.Contains(neighbor))
+                        queue.Enqueue(neighbor);
 
-            throw new Exception("There is no node with that UniqNumber!");
+
+            }
+
+            throw new InvalidOperationException();
         }
 
         public Node FindNode(string address)
@@ -111,8 +110,10 @@ namespace BinaryTree
             var child = FindNode(uniqNumber);
 
             //TODO refactor
-            DeleteNode(child.LeftChild.UniqNumber);
-            DeleteNode(child.RightChild.UniqNumber);
+            if(child.LeftChild != null)
+                DeleteNode(child.LeftChild.UniqNumber);
+            if(child.RightChild != null)
+                DeleteNode(child.RightChild.UniqNumber);
 
 
             var parentNode = child.Parent;

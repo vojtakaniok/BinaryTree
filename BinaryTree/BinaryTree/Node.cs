@@ -45,15 +45,24 @@ namespace BinaryTree
 
         public Node LeftChild
         {
-            set => Child.Insert(0,value);
+            set
+            {
+                onChange("Child"); 
+                Child.Insert(0, value);
+            }
             get => Child.ElementAtOrDefault(0);
         }
 
         public Node RightChild
         {
-            set => Child.Insert(1, value);
+            set
+            {
+                onChange("Child"); 
+                Child.Insert(1, value);
+            }
             get => Child.ElementAtOrDefault(1);
         }
+
         public string Data { set; get; }
 
         private int GetDepth()
