@@ -16,19 +16,17 @@ namespace BinaryTree
         {
             InitializeComponent();
             _newTree = new Tree();
-            var path = @"binTree.txt";
+           
             Debug.WriteLine(Directory.GetCurrentDirectory());
 
-
+            var path = @"binTree.txt";
             _newTree.LoadTreeFromFile(path);
             BinaryTree.ItemsSource = _newTree.Root;
-            _newTree.StoreTreeToFile(_newTree.Root, path);
+            
 
-            var sw = new ReadableTextFile(_newTree.Root, _newTree.MaxLength);
-            Debug.WriteLine("Depth: " + sw.DepthOfTree + "\nWidth: " + sw.WidthOfTree);
-            sw.StoreToFile(@"Readable.txt");
-            for (var i = 0; i < 5; i++)
-                Console.WriteLine((int) Math.Pow(2, i) * 3 + (int) Math.Pow(2, i) - 1);
+            
+            
+
         }
 
         private void Delete_Click(object sender, RoutedEventArgs e)
@@ -47,6 +45,19 @@ namespace BinaryTree
         {
             var node = BinaryTree.SelectedItem as Node;
             _newTree.AddNode(node, Data.Text, true);
+        }
+
+        private void Save_Click(object sender, RoutedEventArgs e)
+        {
+            var path = @"binTree.txt";
+            _newTree.StoreTreeToFile(_newTree.Root, path);
+        }
+
+        private void SaveReadable_Click(object sender, RoutedEventArgs e)
+        {
+            var sw = new ReadableTextFile(_newTree.Root, _newTree.MaxLength);
+            sw.StoreToFile(@"Readable.txt");
+            Debug.WriteLine("Depth: " + sw.DepthOfTree + "\nWidth: " + sw.WidthOfTree);
         }
     }
 }

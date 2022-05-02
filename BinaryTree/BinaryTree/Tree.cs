@@ -128,7 +128,7 @@ namespace BinaryTree
         {
             if (root != null)
             {
-                storable += root.Data + "*" + address + ";\n";
+                storable += root.Data + "*" + address + "\n";
                 MakeStorableString(root.LeftChild, ref storable, address + "l");
                 MakeStorableString(root.RightChild, ref storable, address + "r");
             }

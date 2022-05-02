@@ -20,6 +20,8 @@
         <Button Name="AddRight" Content="Add Right" HorizontalAlignment="Left" Margin="731,122,0,0" VerticalAlignment="Top" Click="Right_Click"/>
         <TextBox Name="Data" HorizontalAlignment="Left" Height="24" Margin="686,68,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="88"/>
         <Label Content="Data:" HorizontalAlignment="Left" Height="23" Margin="636,41,0,0" VerticalAlignment="Top" Width="42" RenderTransformOrigin="0.228,0.107"/>
+        <Button x:Name="Save" Content="Save" HorizontalAlignment="Left" Margin="730,321,0,0" VerticalAlignment="Top" Width="58" Click="Save_Click"/>
+        <Button x:Name="SaveReadable" Content="Save Read" HorizontalAlignment="Left" Margin="730,346,0,0" VerticalAlignment="Top" Click="SaveReadable_Click"/>
 
     </Grid>
 </Window>
