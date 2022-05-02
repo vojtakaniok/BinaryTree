@@ -37,12 +37,16 @@ namespace BinaryTree
 
         private void Left_Click(object sender, RoutedEventArgs e)
         {
+            if(String.IsNullOrWhiteSpace(Data.Text))
+                return;
             var node = BinaryTree.SelectedItem as Node;
             _newTree.AddNode(node, Data.Text);
         }
 
         private void Right_Click(object sender, RoutedEventArgs e)
         {
+            if (String.IsNullOrWhiteSpace(Data.Text))
+                return;
             var node = BinaryTree.SelectedItem as Node;
             _newTree.AddNode(node, Data.Text, true);
         }
