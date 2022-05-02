@@ -80,5 +80,21 @@ namespace BinaryTree
             sw.StoreToFile(@"Readable.txt");
             Debug.WriteLine("Depth: " + sw.DepthOfTree + "\nWidth: " + sw.WidthOfTree);
         }
+
+        private void God_Click(object sender, RoutedEventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(Data.Text))
+                return;
+            try
+            {
+                _newTree.CreateRoot(Data.Text);
+                BinaryTree.ItemsSource = _newTree.Root;
+                BinaryTree.Items.Refresh();
+            }
+            catch (Exception ex)
+            {
+                CreateDialog("Cannot add Right node, Reason:" + ex.Message);
+            }
+        }
     }
 }

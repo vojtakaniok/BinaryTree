@@ -100,6 +100,19 @@ namespace BinaryTree
             return node;
         }
 
+        public void CreateRoot(string data)
+        {
+            if (Root.Count == 0)
+            {
+                Root.Insert(0, new Node(_amountOfNodes,null,data));
+                _amountOfNodes = 1;
+            }
+            else
+            {
+                throw new Exception("Root already present !");
+            }
+        }
+
         public int DeleteNode(int uniqNumber)
         {
             var child = FindNode(uniqNumber);
