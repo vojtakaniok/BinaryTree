@@ -104,7 +104,6 @@ namespace BinaryTree
         {
             var child = FindNode(uniqNumber);
 
-            //TODO refactor
             if (child.LeftChild != null)
                 DeleteNode(child.LeftChild.UniqNumber);
             if (child.RightChild != null)
