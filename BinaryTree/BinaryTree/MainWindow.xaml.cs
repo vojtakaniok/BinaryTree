@@ -16,17 +16,12 @@ namespace BinaryTree
         {
             InitializeComponent();
             _newTree = new Tree();
-           
+
             Debug.WriteLine(Directory.GetCurrentDirectory());
 
             var path = @"binTree.txt";
             _newTree.LoadTreeFromFile(path);
             BinaryTree.ItemsSource = _newTree.Root;
-            
-
-            
-            
-
         }
 
         private void Delete_Click(object sender, RoutedEventArgs e)
@@ -37,30 +32,30 @@ namespace BinaryTree
 
         private void Left_Click(object sender, RoutedEventArgs e)
         {
-            if(String.IsNullOrWhiteSpace(Data.Text))
+            if (string.IsNullOrWhiteSpace(Data.Text))
                 return;
             try
             {
                 var node = BinaryTree.SelectedItem as Node;
-            
+
                 _newTree.AddNode(node, Data.Text);
             }
             catch (Exception ex)
             {
-               CreateDialog("Cannot add Left node, Reason:" + ex.Message);
+                CreateDialog("Cannot add Left node, Reason:" + ex.Message);
             }
         }
 
         private void CreateDialog(string text)
         {
-            string txt = "Error";
-            MessageBoxButton button = MessageBoxButton.OK;
-            MessageBoxResult result = MessageBox.Show(text, txt, button);
+            var txt = "Error";
+            var button = MessageBoxButton.OK;
+            var result = MessageBox.Show(text, txt, button);
         }
 
         private void Right_Click(object sender, RoutedEventArgs e)
         {
-            if (String.IsNullOrWhiteSpace(Data.Text))
+            if (string.IsNullOrWhiteSpace(Data.Text))
                 return;
             try
             {
@@ -69,7 +64,7 @@ namespace BinaryTree
             }
             catch (Exception ex)
             {
-                CreateDialog("Cannot add Right node, Reason:"+ ex.Message);
+                CreateDialog("Cannot add Right node, Reason:" + ex.Message);
             }
         }
 
