@@ -1,16 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Windows.Documents;
 
 namespace BinaryTree
 {
-    internal class Node:INotifyPropertyChanged
+    internal class Node : INotifyPropertyChanged
     {
-        public Dictionary<int, Node> ChildKeyValuePair { get; } = new Dictionary<int, Node>();
-        public List<Node> Child => new List<Node>(ChildKeyValuePair.Values);
-
         public Node(int uniqNumber, Node parent, string data)
         {
             if (data.Contains("*") ^ data.Contains(";"))
@@ -22,21 +17,15 @@ namespace BinaryTree
             RightChild = null;
             Parent = parent;
         }
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        private void OnChange(string propertyName)
-        {
-            if (PropertyChanged != null)
-            {
-                this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-            }
-        }
 
         public Node(int uniqNumber, Node parent)
         {
             UniqNumber = uniqNumber;
             Parent = parent;
         }
+
+        private Dictionary<int, Node> ChildKeyValuePair { get; } = new Dictionary<int, Node>();
+        public List<Node> Child => new List<Node>(ChildKeyValuePair.Values);
 
         public int UniqNumber { set; get; }
 
@@ -48,7 +37,7 @@ namespace BinaryTree
         {
             set
             {
-                ChildKeyValuePair[0]= value;
+                ChildKeyValuePair[0] = value;
                 OnChange("Child");
             }
             get
@@ -66,14 +55,21 @@ namespace BinaryTree
                 ChildKeyValuePair[1] = value;
                 OnChange("Child");
             }
-            get {
-            Node value = null;
-            ChildKeyValuePair.TryGetValue(1, out value);
-            return value;
+            get
+            {
+                Node value;
+                ChildKeyValuePair.TryGetValue(1, out value);
+                return value;
             }
         }
 
         public string Data { set; get; }
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void OnChange(string propertyName)
+        {
+            if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+        }
 
         private int GetDepth()
         {

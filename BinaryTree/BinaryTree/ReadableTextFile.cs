@@ -8,10 +8,19 @@ namespace BinaryTree
 {
     internal class ReadableTextFile
     {
-        private readonly Node _root;
-        private int _currentDepth;
         private readonly int _lengthOfData;
         private readonly List<string> _lines = new List<string>();
+        private readonly Node _root;
+        private int _currentDepth;
+
+        public ReadableTextFile(List<Node> root, int lengthOfData)
+        {
+            _root = root.ElementAt(0);
+            _lengthOfData = lengthOfData;
+            _currentDepth = 0;
+            PrepareLines();
+            PrintTree(_root);
+        }
 
         public int DepthOfTree => GetDepth(_root);
 
@@ -87,15 +96,6 @@ namespace BinaryTree
 
                 numberOfLine = GetNumberOfLine(actualNode);
             } while (unexploredNodes.Count != 0);
-        }
-
-        public ReadableTextFile(List<Node> root, int lengthOfData)
-        {
-            _root = root.ElementAt(0);
-            _lengthOfData = lengthOfData;
-            _currentDepth = 0;
-            PrepareLines();
-            PrintTree(_root);
         }
 
 

@@ -19,7 +19,7 @@ namespace BinaryTree
         public Tree()
         {
             _amountOfNodes = 0;
-            Root.Insert(0,new Node(_amountOfNodes, null));
+            Root.Insert(0, new Node(_amountOfNodes, null));
             _amountOfNodes++;
         }
 
@@ -46,7 +46,7 @@ namespace BinaryTree
                 _amountOfNodes++;
                 return _amountOfNodes - 1;
             }
-            
+
 
             throw new Exception("Node can't have more than two children!");
         }
@@ -59,7 +59,7 @@ namespace BinaryTree
             if (root.UniqNumber == uniqNumber)
                 return root;
             queue.Enqueue(root);
-           
+
 
             while (queue.Count > 0)
             {
@@ -71,10 +71,8 @@ namespace BinaryTree
 
                 visited.Add(node);
                 foreach (var neighbor in node.Child)
-                    if (!visited.Contains(neighbor)&& neighbor!=null)
+                    if (!visited.Contains(neighbor) && neighbor != null)
                         queue.Enqueue(neighbor);
-
-
             }
 
             throw new InvalidOperationException();
@@ -84,8 +82,6 @@ namespace BinaryTree
         {
             var node = Root.ElementAt(0);
             foreach (var c in address)
-            {
-
                 switch (c)
                 {
                     case 'l':
@@ -100,7 +96,6 @@ namespace BinaryTree
                     default:
                         throw new Exception();
                 }
-            }
 
             return node;
         }
@@ -110,19 +105,17 @@ namespace BinaryTree
             var child = FindNode(uniqNumber);
 
             //TODO refactor
-            if(child.LeftChild != null)
+            if (child.LeftChild != null)
                 DeleteNode(child.LeftChild.UniqNumber);
-            if(child.RightChild != null)
+            if (child.RightChild != null)
                 DeleteNode(child.RightChild.UniqNumber);
-            
+
 
             var parentNode = child.Parent;
-            if (parentNode.LeftChild != null && parentNode.LeftChild== child)
+            if (parentNode.LeftChild != null && parentNode.LeftChild == child)
                 parentNode.LeftChild = null;
-            else if(parentNode.RightChild != null && parentNode.RightChild == child)
+            else if (parentNode.RightChild != null && parentNode.RightChild == child)
                 parentNode.RightChild = null;
-            child.Parent = null;
-            child = null;
             _amountOfNodes--;
             return uniqNumber;
         }
@@ -159,16 +152,16 @@ namespace BinaryTree
             var address = line.Substring(line.LastIndexOf('*') + 1);
 
             if (string.IsNullOrWhiteSpace(address))
+            {
                 root.Data = data;
+            }
             else
             {
-                var last = address.ElementAt(address.Length-1);
+                var last = address.ElementAt(address.Length - 1);
                 var toSearch = address.Substring(0, address.Length - 1);
                 var node = FindNode(toSearch);
                 AddNode(node, data, last == 'r');
             }
-            
-                  
         }
 
         public Node LoadTreeFromFile(string filePath)
