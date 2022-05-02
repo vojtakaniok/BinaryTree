@@ -24,8 +24,8 @@ namespace BinaryTree
             Parent = parent;
         }
 
-        private Dictionary<int, Node> ChildKeyValuePair { get; } = new Dictionary<int, Node>();
-        public List<Node> Child => new List<Node>(ChildKeyValuePair.Values);
+        private readonly Dictionary<int, Node> _childKeyValuePair = new Dictionary<int, Node>();
+        public List<Node> Child => new List<Node>(_childKeyValuePair.Values);
 
         public int UniqNumber { set; get; }
 
@@ -37,13 +37,13 @@ namespace BinaryTree
         {
             set
             {
-                ChildKeyValuePair[0] = value;
+                _childKeyValuePair[0] = value;
                 OnChange("Child");
             }
             get
             {
                 Node value = null;
-                ChildKeyValuePair.TryGetValue(0, out value);
+                _childKeyValuePair.TryGetValue(0, out value);
                 return value;
             }
         }
@@ -52,13 +52,13 @@ namespace BinaryTree
         {
             set
             {
-                ChildKeyValuePair[1] = value;
+                _childKeyValuePair[1] = value;
                 OnChange("Child");
             }
             get
             {
                 Node value;
-                ChildKeyValuePair.TryGetValue(1, out value);
+                _childKeyValuePair.TryGetValue(1, out value);
                 return value;
             }
         }
