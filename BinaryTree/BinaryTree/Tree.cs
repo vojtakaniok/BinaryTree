@@ -71,7 +71,7 @@ namespace BinaryTree
 
                 visited.Add(node);
                 foreach (var neighbor in node.Child)
-                    if (!visited.Contains(neighbor))
+                    if (!visited.Contains(neighbor)&& neighbor!=null)
                         queue.Enqueue(neighbor);
 
 
@@ -114,14 +114,15 @@ namespace BinaryTree
                 DeleteNode(child.LeftChild.UniqNumber);
             if(child.RightChild != null)
                 DeleteNode(child.RightChild.UniqNumber);
-
+            
 
             var parentNode = child.Parent;
-            if (parentNode.LeftChild == child)
+            if (parentNode.LeftChild != null && parentNode.LeftChild== child)
                 parentNode.LeftChild = null;
-            else
+            else if(parentNode.RightChild != null && parentNode.RightChild == child)
                 parentNode.RightChild = null;
-            
+            child.Parent = null;
+            child = null;
             _amountOfNodes--;
             return uniqNumber;
         }

@@ -6,9 +6,10 @@ using System.Windows.Documents;
 
 namespace BinaryTree
 {
-    internal class Node
+    internal class Node:INotifyPropertyChanged
     {
-        public List<Node> Child { get; } = new List<Node>();
+        public Dictionary<int, Node> ChildKeyValuePair { get; } = new Dictionary<int, Node>();
+        public List<Node> Child => new List<Node>(ChildKeyValuePair.Values);
 
         public Node(int uniqNumber, Node parent, string data)
         {
@@ -23,7 +24,7 @@ namespace BinaryTree
         }
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private void onChange(string propertyName)
+        private void OnChange(string propertyName)
         {
             if (PropertyChanged != null)
             {
@@ -41,26 +42,35 @@ namespace BinaryTree
 
         public int Depth => GetDepth();
 
-        public Node Parent { get; }
+        public Node Parent { get; set; }
 
         public Node LeftChild
         {
             set
             {
-                onChange("Child"); 
-                Child.Insert(0, value);
+                ChildKeyValuePair[0]= value;
+                OnChange("Child");
             }
-            get => Child.ElementAtOrDefault(0);
+            get
+            {
+                Node value = null;
+                ChildKeyValuePair.TryGetValue(0, out value);
+                return value;
+            }
         }
 
         public Node RightChild
         {
             set
             {
-                onChange("Child"); 
-                Child.Insert(1, value);
+                ChildKeyValuePair[1] = value;
+                OnChange("Child");
             }
-            get => Child.ElementAtOrDefault(1);
+            get {
+            Node value = null;
+            ChildKeyValuePair.TryGetValue(1, out value);
+            return value;
+            }
         }
 
         public string Data { set; get; }
