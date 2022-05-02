@@ -63,7 +63,18 @@ namespace BinaryTree
             }
         }
 
-        public string Data { set; get; }
+        private string _data;
+
+        public string Data
+        {
+            set
+            {
+                _data = value;
+                OnChange("Data");
+            }
+            get => _data;
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         private void OnChange(string propertyName)

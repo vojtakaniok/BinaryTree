@@ -104,6 +104,7 @@ namespace BinaryTree
         {
             var child = FindNode(uniqNumber);
 
+
             if (child.LeftChild != null)
                 DeleteNode(child.LeftChild.UniqNumber);
             if (child.RightChild != null)
@@ -111,11 +112,22 @@ namespace BinaryTree
 
 
             var parentNode = child.Parent;
-            if (parentNode.LeftChild != null && parentNode.LeftChild == child)
-                parentNode.LeftChild = null;
-            else if (parentNode.RightChild != null && parentNode.RightChild == child)
-                parentNode.RightChild = null;
-            _amountOfNodes--;
+            if (parentNode != null)
+            {
+                if (parentNode.LeftChild != null && parentNode.LeftChild == child)
+                    parentNode.LeftChild = null;
+                else if (parentNode.RightChild != null && parentNode.RightChild == child)
+                    parentNode.RightChild = null;
+                _amountOfNodes--;
+            }
+            else
+            {
+                child.Data = null;
+                Root.Clear();
+                _amountOfNodes = 0;
+                
+            }
+
             return uniqNumber;
         }
 
