@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 using System.Windows;
+using Microsoft.Win32;
 
 namespace BinaryTree
 {
@@ -10,7 +11,7 @@ namespace BinaryTree
     /// </summary>
     public partial class MainWindow : Window
     {
-        private readonly Tree _newTree;
+        private Tree _newTree;
 
         public MainWindow()
         {
@@ -42,7 +43,7 @@ namespace BinaryTree
             }
             catch (Exception ex)
             {
-                CreateDialog("Cannot add Left node, Reason:" + ex.Message);
+                CreateDialog("Cannot add Left node, Reason: " + ex.Message);
             }
         }
 
@@ -64,7 +65,7 @@ namespace BinaryTree
             }
             catch (Exception ex)
             {
-                CreateDialog("Cannot add Right node, Reason:" + ex.Message);
+                CreateDialog("Cannot add Right node, Reason: " + ex.Message);
             }
         }
 
@@ -93,8 +94,33 @@ namespace BinaryTree
             }
             catch (Exception ex)
             {
-                CreateDialog("Cannot add Right node, Reason:" + ex.Message);
+                CreateDialog("Cannot add Right node, Reason: " + ex.Message);
             }
+        }
+
+        private void Load_Click(object sender, RoutedEventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(Path.Text))
+                return;
+            try
+            {
+                _newTree = new Tree();
+                _newTree.LoadTreeFromFile(Path.Text);
+                BinaryTree.ItemsSource = _newTree.Root;
+                BinaryTree.Items.Refresh();
+            }
+            catch (Exception ex)
+            {
+                CreateDialog("Cannot load file, Reason: "+ ex.Message);
+            }
+        }
+
+        private void Dialog_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*";
+            if (openFileDialog.ShowDialog() == true)
+                Path.Text = openFileDialog.FileName;
         }
     }
 }

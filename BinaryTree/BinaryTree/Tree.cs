@@ -33,22 +33,33 @@ namespace BinaryTree
             if (MaxLength < data.Length)
                 MaxLength = data.Length;
 
-            if ((node.LeftChild == null) & (startWithRight == false))
+            if (!startWithRight)
             {
-                node.LeftChild = new Node(_amountOfNodes, node, data);
-                _amountOfNodes++;
-                return _amountOfNodes - 1;
+                if (node.LeftChild == null)
+                {
+                    node.LeftChild = new Node(_amountOfNodes, node, data);
+                    _amountOfNodes++;
+                    return _amountOfNodes - 1;
+                }
+                else
+                {
+                    throw new Exception("Left Child already present");
+                }
+            }
+            else
+            {
+                if (node.RightChild == null)
+                {
+                    node.RightChild = new Node(_amountOfNodes, node, data);
+                    _amountOfNodes++;
+                    return _amountOfNodes - 1;
+                }
+                else
+                {
+                    throw new Exception("Right Child Already present");
+                }
             }
 
-            if ((node.RightChild == null) & startWithRight)
-            {
-                node.RightChild = new Node(_amountOfNodes, node, data);
-                _amountOfNodes++;
-                return _amountOfNodes - 1;
-            }
-
-
-            throw new Exception("Node can't have more than two children!");
         }
 
         public Node FindNode(int uniqNumber)

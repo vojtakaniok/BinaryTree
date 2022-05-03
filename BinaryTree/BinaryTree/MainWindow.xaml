@@ -20,9 +20,12 @@
         <Button Name="AddRight" Content="Add Right" Margin="0,122,12,0" VerticalAlignment="Top" Click="Right_Click" HorizontalAlignment="Right" Width="57"/>
         <TextBox Name="Data" HorizontalAlignment="Right" Height="24" Margin="0,68,26,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="88"/>
         <Label Content="Data:" HorizontalAlignment="Right" Height="23" Margin="0,41,122,0" VerticalAlignment="Top" Width="42" RenderTransformOrigin="0.228,0.107"/>
-        <Button x:Name="Save" Content="Save" HorizontalAlignment="Right" Margin="0,321,12,0" VerticalAlignment="Top" Width="58" Click="Save_Click"/>
-        <Button x:Name="SaveReadable" Content="Save Read" HorizontalAlignment="Right" Margin="0,346,12,0" VerticalAlignment="Top" Click="SaveReadable_Click"/>
+        <Button x:Name="Save" Content="Save" HorizontalAlignment="Right" Margin="0,358,12,0" VerticalAlignment="Top" Width="58" Click="Save_Click"/>
+        <Button x:Name="SaveReadable" Content="Save Read" HorizontalAlignment="Right" Margin="0,383,12,0" VerticalAlignment="Top" Click="SaveReadable_Click"/>
         <Button x:Name="God" Content="Create Root" Margin="0,147,13,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="79" Click="God_Click"/>
+        <Button x:Name="Load" Content="Load" HorizontalAlignment="Right" Margin="0,333,12,0" VerticalAlignment="Top" Width="58" Click="Load_Click" />
+        <TextBox Name="Path" HorizontalAlignment="Right" Height="20" Margin="0,243,41,0" TextWrapping="Wrap" Text="Select File" VerticalAlignment="Top" Width="118"/>
+        <Button x:Name="Dialog" Content="Browse" HorizontalAlignment="Right" Margin="0,275,10,0" VerticalAlignment="Top" Width="49" Click="Dialog_Click"  />
 
     </Grid>
 </Window>
