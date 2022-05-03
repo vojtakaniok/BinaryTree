@@ -94,7 +94,7 @@ namespace BinaryTree
             }
             catch (Exception ex)
             {
-                CreateDialog("Cannot add Right node, Reason: " + ex.Message);
+                CreateDialog("Cannot add Root node, Reason: " + ex.Message);
             }
         }
 
