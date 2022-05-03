@@ -6,6 +6,10 @@ namespace BinaryTree
 {
     internal class Node : INotifyPropertyChanged
     {
+        private readonly Dictionary<int, Node> _childKeyValuePair = new Dictionary<int, Node>();
+
+        private string _data;
+
         public Node(int uniqNumber, Node parent, string data)
         {
             if (data.Contains("*") ^ data.Contains(";"))
@@ -24,7 +28,6 @@ namespace BinaryTree
             Parent = parent;
         }
 
-        private readonly Dictionary<int, Node> _childKeyValuePair = new Dictionary<int, Node>();
         public List<Node> Child => new List<Node>(_childKeyValuePair.Values);
 
         public int UniqNumber { set; get; }
@@ -62,8 +65,6 @@ namespace BinaryTree
                 return value;
             }
         }
-
-        private string _data;
 
         public string Data
         {

@@ -41,25 +41,18 @@ namespace BinaryTree
                     _amountOfNodes++;
                     return _amountOfNodes - 1;
                 }
-                else
-                {
-                    throw new Exception("Left Child already present");
-                }
-            }
-            else
-            {
-                if (node.RightChild == null)
-                {
-                    node.RightChild = new Node(_amountOfNodes, node, data);
-                    _amountOfNodes++;
-                    return _amountOfNodes - 1;
-                }
-                else
-                {
-                    throw new Exception("Right Child Already present");
-                }
+
+                throw new Exception("Left Child already present");
             }
 
+            if (node.RightChild == null)
+            {
+                node.RightChild = new Node(_amountOfNodes, node, data);
+                _amountOfNodes++;
+                return _amountOfNodes - 1;
+            }
+
+            throw new Exception("Right Child Already present");
         }
 
         public Node FindNode(int uniqNumber)
@@ -115,7 +108,7 @@ namespace BinaryTree
         {
             if (Root.Count == 0)
             {
-                Root.Insert(0, new Node(_amountOfNodes,null,data));
+                Root.Insert(0, new Node(_amountOfNodes, null, data));
                 _amountOfNodes = 1;
             }
             else
@@ -149,7 +142,6 @@ namespace BinaryTree
                 child.Data = null;
                 Root.Clear();
                 _amountOfNodes = 0;
-                
             }
 
             return uniqNumber;

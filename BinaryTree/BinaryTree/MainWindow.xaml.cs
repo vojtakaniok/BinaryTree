@@ -102,15 +102,24 @@ namespace BinaryTree
         {
             if (string.IsNullOrWhiteSpace(Path.Text))
                 return;
+            var oldTree = _newTree;
             try
             {
-                _newTree = new Tree();
-                _newTree.LoadTreeFromFile(Path.Text);
-                BinaryTree.ItemsSource = _newTree.Root;
-                BinaryTree.Items.Refresh();
+                if (File.Exists(Path.Text))
+                {
+                    _newTree = new Tree();
+                    _newTree.LoadTreeFromFile(Path.Text);
+                    BinaryTree.ItemsSource = _newTree.Root;
+                    BinaryTree.Items.Refresh();
+                }
+                else
+                {
+                    CreateDialog("File not exist");
+                }
             }
             catch (Exception ex)
             {
+                _newTree = oldTree;
                 CreateDialog("Cannot load file, Reason: "+ ex.Message);
             }
         }
