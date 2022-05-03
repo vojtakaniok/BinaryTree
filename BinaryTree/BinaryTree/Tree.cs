@@ -108,7 +108,7 @@ namespace BinaryTree
 
         public void CreateRoot(string data)
         {
-            if (Root.Count == 0|| Root[0]== null)
+            if (Root.Count == 0 || Root[0]?.Data == null)
             {
                 Root.Clear();
                 Root.Insert(0, new Node(_amountOfNodes, null, data));
