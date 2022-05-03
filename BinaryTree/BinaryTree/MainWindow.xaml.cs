@@ -21,8 +21,15 @@ namespace BinaryTree
             Debug.WriteLine(Directory.GetCurrentDirectory());
 
             var path = @"binTree.txt";
-            _newTree.LoadTreeFromFile(path);
-            BinaryTree.ItemsSource = _newTree.Root;
+            try
+            {
+                _newTree.LoadTreeFromFile(path);
+                BinaryTree.ItemsSource = _newTree.Root;
+            }
+            catch (Exception ex)
+            {
+                CreateDialog("Cannot load file, Reason: " + ex.Message);
+            }
         }
 
         private void Delete_Click(object sender, RoutedEventArgs e)
