@@ -92,11 +92,11 @@ namespace BinaryTree
                 {
                     case 'l':
 
-                        node = node.LeftChild;
+                        node = node?.LeftChild;
                         break;
                     case 'r':
 
-                        node = node.RightChild;
+                        node = node?.RightChild;
 
                         break;
                     default:
