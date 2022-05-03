@@ -32,6 +32,8 @@ namespace BinaryTree
                 throw new Exception("Data cannot contain '*' or ';' character!");
             if (MaxLength < data.Length)
                 MaxLength = data.Length;
+            if (node == null)
+                throw new Exception("Node not found");
 
             if (!startWithRight)
             {
