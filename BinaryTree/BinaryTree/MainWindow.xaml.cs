@@ -105,17 +105,10 @@ namespace BinaryTree
             var oldTree = _newTree;
             try
             {
-                if (File.Exists(Path.Text))
-                {
-                    _newTree = new Tree();
-                    _newTree.LoadTreeFromFile(Path.Text);
-                    BinaryTree.ItemsSource = _newTree.Root;
-                    BinaryTree.Items.Refresh();
-                }
-                else
-                {
-                    CreateDialog("File not exist");
-                }
+                _newTree = new Tree();
+                _newTree.LoadTreeFromFile(Path.Text);
+                BinaryTree.ItemsSource = _newTree.Root;
+                BinaryTree.Items.Refresh();
             }
             catch (Exception ex)
             {
