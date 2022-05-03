@@ -24,12 +24,13 @@ namespace BinaryTree
             try
             {
                 _newTree.LoadTreeFromFile(path);
-                BinaryTree.ItemsSource = _newTree.Root;
+                
             }
             catch (Exception ex)
             {
                 CreateDialog("Cannot load file, Reason: " + ex.Message);
             }
+            BinaryTree.ItemsSource = _newTree.Root;
         }
 
         private void Delete_Click(object sender, RoutedEventArgs e)
@@ -96,13 +97,14 @@ namespace BinaryTree
             try
             {
                 _newTree.CreateRoot(Data.Text);
-                BinaryTree.ItemsSource = _newTree.Root;
-                BinaryTree.Items.Refresh();
+                
             }
             catch (Exception ex)
             {
                 CreateDialog("Cannot add Root node, Reason: " + ex.Message);
             }
+            BinaryTree.ItemsSource = _newTree.Root;
+            BinaryTree.Items.Refresh();
         }
 
         private void Load_Click(object sender, RoutedEventArgs e)
@@ -114,14 +116,15 @@ namespace BinaryTree
             {
                 _newTree = new Tree();
                 _newTree.LoadTreeFromFile(Path.Text);
-                BinaryTree.ItemsSource = _newTree.Root;
-                BinaryTree.Items.Refresh();
+                
             }
             catch (Exception ex)
             {
                 _newTree = oldTree;
                 CreateDialog("Cannot load file, Reason: "+ ex.Message);
             }
+            BinaryTree.ItemsSource = _newTree.Root;
+            BinaryTree.Items.Refresh();
         }
 
         private void Dialog_Click(object sender, RoutedEventArgs e)
